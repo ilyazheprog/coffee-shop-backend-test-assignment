@@ -1,0 +1,78 @@
+[project]
+name = "app"
+version = "0.1.0"
+description = "Default template for PDM package"
+authors = [
+    {name = "ilya", email = "ilya_zhenetskij@vk.com"},
+]
+dependencies = [
+]
+requires-python = "==3.11.*"
+readme = "README.md"
+license = {text = "MIT"}
+
+
+[project.optional-dependencies]
+main = [
+    "aiogram>=3.13.1",
+    "aiohttp>=3.10.8",
+    "alembic>=1.13.3",
+    "requests>=2.32.3",
+    "environs>=11.0.0",
+    "sqlalchemy[asyncio]>=2.0.35",
+    "asyncpg>=0.29.0",
+    "psycopg[binary]>=3.2.2",
+    "cryptography>=43.0.1",
+    "celery>=5.4.0",
+    "loguru>=0.7.2",
+    "redis<5.1.0",
+]
+[tool.pdm]
+distribution = false
+
+
+[tool.pdm.scripts]
+i = "pdm install {args} -G main"
+i-dev = "pdm install --dev -G dev {args}"
+i-back = "pdm install --dev -G back {args}"
+rm-dev = "pdm remove {args} -G dev"
+rm = "pdm remove {args} -G main"
+add-dev = "pdm add {args} --dev -G dev"
+add-main = "pdm add {args} --dev -G main"
+start = "python bot/main.py"
+start-back = "pdm run python back/main.py"
+start_celery_worker = "celery -A modules.schedule_notifications.main worker -l info"
+start_celery_beat = "celery -A modules.schedule_notifications.main beat -l info"
+alembic-migration = "pdm run alembic revision --autogenerate -m {args}"
+alembic-upgrade = "pdm run alembic upgrade head"
+alembic-downgrade = "pdm run alembic downgrade -1"
+apply-seeds = "pdm run python -m modules.database.seeders.main"
+db-clear = "pdm run python -m modules.database.management.db_clear"
+test = "pdm run pytest"
+isort = "pdm run python -m isort app/"
+black = "pdm run python -m black app/"
+
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "black>=24.8.0",
+    "isort>=5.13.2",
+]
+back = [
+    "fastapi>=0.115.0",
+    "uvicorn>=0.31.0",
+    "environs>=11.0.0",
+    "pydantic>=2.9.2",
+    "jinja2>=3.1.4",
+]
+[tool.black]
+line-length = 90
+target-version = ['py311']
+
+[tool.isort]
+profile = "black"
+known_third_party = ["aiogram"]
+known_first_party = ["bot", "modules"]
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+combine_as_imports = true
+line_length = 88

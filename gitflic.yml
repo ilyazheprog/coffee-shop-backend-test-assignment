@@ -1,0 +1,12 @@
+variables:
+  GIT_STRATEGY: none
+
+stages:
+  - deploy
+  
+deploy job:
+  only:
+    - master
+  stage: deploy
+  script:
+    - ssh $SSH_USER@$SSH_IP "cd $SSH_PATH && git checkout master && git pull && make down all && exit" 
