@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from back.schemas import CartItemCreate, CartItemOut, CartOut
+from back.schemas.carts_item import CartItemCreate, CartItemOut, CartOut
 from modules.database.connect import get_async_session
 from modules.database.methods.carts_item import add_to_cart, get_cart, remove_from_cart, clear_cart
 
