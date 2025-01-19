@@ -39,3 +39,7 @@ def drop_all_sync():
         print("Все таблицы успешно удалены (синхронно).")
     except SQLAlchemyError as e:
         print(f"Ошибка при удалении таблиц (синхронно): {e}")
+
+async def get_async_session():
+    async with async_session() as session:
+        yield session

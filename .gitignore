@@ -1,4 +1,5 @@
 .env
+.pdm-python
 .venv
 .vscode
 .idea

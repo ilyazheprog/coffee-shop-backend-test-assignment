@@ -74,7 +74,6 @@ async def list_users(message: Message, redis: Redis):
         ),
         parse_mode=ParseMode.MARKDOWN_V2,
     )
-    
 
 
 @router.callback_query(F.data.startswith(Callbacks.PAGE))
@@ -121,6 +120,7 @@ async def users_paggination(query: CallbackQuery, redis: Redis):
         ),
         parse_mode=ParseMode.MARKDOWN_V2,
     )
+
 
 @router.message(CommandStart())
 async def start(message: Message, state: FSMContext, redis: Redis):

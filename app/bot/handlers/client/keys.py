@@ -362,7 +362,10 @@ async def renew_keys_done(query: CallbackQuery, redis: Redis):
         await query.message.edit_text(
             f"Вернули {refund_price}. Продлено {count_keys_renewed} из {count_keys} выбраных ключей. Напишите @ilyazheprog"
         )
-        logger.info(f"To user {query.from_user.id} refunded {refund_price} for fail renewing keys.")
+        logger.info(
+            f"To user {query.from_user.id} refunded {refund_price} for fail renewing keys."
+        )
+
 
 @router.callback_query(F.data == Callbacks.RENEW_KEYS_ALL)
 async def renew_keys_all(query: CallbackQuery, redis: Redis):
@@ -412,7 +415,9 @@ async def clear_ip_list(message: Message, state: FSMContext):
     keys = await get_keys_by_user(message.from_user.id)
 
     if not keys:
-        await message.answer("У вас нет ключей для очистки списка IP.", reply_markup=keys_client_keyboard)
+        await message.answer(
+            "У вас нет ключей для очистки списка IP.", reply_markup=keys_client_keyboard
+        )
         logger.info(f"User {message.from_user.id} has no keys to clear the IP list.")
         return
 
@@ -436,8 +441,14 @@ async def clear_ip_list(message: Message, state: FSMContext):
             inbound_id=1,
         ) as xui:
             if not await xui.clear_ip_list(id_key=key_details["id_from_pannel"]):
-                await message.answer(f"Ошибка очистки списка IP для ключа {key_details['name_from_pannel']}.")
-                logger.error(f"Failed to clear IP list for key {key_details['name_from_pannel']} for user {message.from_user.id}.")
+                await message.answer(
+                    f"Ошибка очистки списка IP для ключа {key_details['name_from_pannel']}."
+                )
+                logger.error(
+                    f"Failed to clear IP list for key {key_details['name_from_pannel']} for user {message.from_user.id}."
+                )
 
     await message.answer(f"Список IP успешно очищен для всех ключей.")
-    logger.info(f"IP list successfully cleared for all keys for user {message.from_user.id}.")
+    logger.info(
+        f"IP list successfully cleared for all keys for user {message.from_user.id}."
+    )

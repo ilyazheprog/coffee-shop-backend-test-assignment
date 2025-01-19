@@ -8,14 +8,6 @@ services:
       - db
     networks:
       - net
-  redis:
-    extends:
-      file: ./app/bot/docker-compose.yml
-      service: redis
-    ports:
-      - '6379:6379'
-    networks:
-      - net
   db:
     image: postgres:15.8-alpine
     restart: always
@@ -42,11 +34,6 @@ services:
 volumes:
   db:
   venvs:
-  redis_data:
-    driver_opts:
-      type: none
-      o: bind
-      device: /home/bot/redis_data
 
 networks:
   net:

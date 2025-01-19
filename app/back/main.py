@@ -1,7 +1,9 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
+from routers import global_router
 
 app = FastAPI()
 
+app.include_router(global_router)
 if __name__ == "__main__":
     import uvicorn
 

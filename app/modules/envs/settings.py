@@ -10,6 +10,7 @@ class Bot:
     bot: AioBot
     admin_id: int
 
+
 @dataclass
 class Database:
     engine: str
@@ -20,10 +21,12 @@ class Database:
     echo: bool
     link: str = None
 
+
 @dataclass
 class Config:
     bot: Bot
     database: Database
+
 
 def get_settings():
     env_var = Env()
@@ -41,8 +44,9 @@ def get_settings():
             mame=env_var.str("DB_DB"),
             host=env_var.str("DB_HOST"),
             echo=env_var.bool("DB_ECHO"),
-        )
+        ),
     )
+
 
 settings = get_settings()
 sdb = settings.database

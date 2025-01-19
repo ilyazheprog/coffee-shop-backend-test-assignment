@@ -17,7 +17,12 @@ from modules.redis.main import set_state_with_redis
 
 router = Router()
 
+
 @router.message()
 async def unrecognized_message(message: Message):
-    logger.warning(f"User {message.from_user.id} sent an unrecognized message: {message.text}")
-    await message.answer("Я не знаю, что ответить на это сообщение. Возможно, я обновился. Нажмите /start, чтобы начать работу с ботом.")
+    logger.warning(
+        f"User {message.from_user.id} sent an unrecognized message: {message.text}"
+    )
+    await message.answer(
+        "Я не знаю, что ответить на это сообщение. Возможно, я обновился. Нажмите /start, чтобы начать работу с ботом."
+    )

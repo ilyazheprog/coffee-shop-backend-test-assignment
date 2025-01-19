@@ -8,6 +8,7 @@ def registry_middlewares(dp: Dispatcher):
 def registry_handlers(dp: Dispatcher):
     pass
 
+
 def registry(dp: Dispatcher):
     registry_middlewares(dp)
     registry_handlers(dp)

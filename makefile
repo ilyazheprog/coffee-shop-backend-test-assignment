@@ -18,7 +18,7 @@ db_login:
 	# \c database - connect to db
 	# \dt - list tables
 	# select * from table - view table content
-	@docker compose exec db psql --username=vpn --dbname=vpn
+	@docker compose exec db psql --username=coffee --dbname=coffee
 
 db_clear:
 	# remove all data from database, including user data

@@ -6,9 +6,9 @@ from .helpers import fill_seed
 
 
 async def main():
-    for model, field, data, is_replaceble in all_seeds:
+    for model, field, data in all_seeds:
         async with async_session() as session:
-            await fill_seed(session, model, field, data, is_replaceble)
+            await fill_seed(session, model, field, data)
 
 
 if __name__ == "__main__":
