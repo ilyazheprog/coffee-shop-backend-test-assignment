@@ -34,6 +34,7 @@ back = [
     "sqlalchemy[asyncio]>=2.0.37",
     "asyncpg>=0.30.0",
     "psycopg[binary]>=3.2.4",
+    "alembic>=1.14.0",
 ]
 
 [tool.black]

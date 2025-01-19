@@ -1,19 +1,19 @@
+from .out import ORMSchema
+from pydantic import BaseModel
 from typing import Optional
-from pydantic import BaseModel, Field, PositiveInt
 
 
-class UserBase(BaseModel):
-    role_id: int = Field(..., ge=1, le=3)
-    username: Optional[str] = Field(..., min_length=1, max_length=255)
+class UserCreate(BaseModel):
+    tg_id: int
+    role_id: int
+    username: Optional[str] = None
 
 
-class UserOut(UserBase):
-    id: int = Field(..., gt=0)
+class UserOut(ORMSchema):
+    id: int
+    username: Optional[str]
+    role_id: int
 
 
-class UserCreate(UserOut): ...
-
-
-class UserUpdate(BaseModel):
-    role_id: Optional[int] = Field(..., ge=1, le=3)
-    username: Optional[str] = Field(..., min_length=1, max_length=255)
+class RoleChange(BaseModel):
+    new_role_id: int
