@@ -80,3 +80,22 @@ async def get_all_roles(session: AsyncSession) -> list[Role]:
     """
     result = await session.execute(select(Role))
     return result.scalars().all()
+
+
+async def delete_role(role_id: int, session: AsyncSession) -> bool:
+    """
+    Удаляет роль по ID.
+
+    :param role_id: ID роли.
+    :param session: Сессия базы данных.
+    :return: True, если удалена, иначе False.
+    """
+    result = await session.execute(select(Role).where(Role.id == role_id))
+    role = result.scalars().first()
+
+    if not role:
+        return False
+
+    await session.delete(role)
+    await session.commit()
+    return True
