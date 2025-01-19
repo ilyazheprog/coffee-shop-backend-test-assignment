@@ -10,7 +10,7 @@ class Bot:
     bot: AioBot
     admin_id: int
     admin_username: str
-
+    backend_url: str
 
 @dataclass
 class Database:
@@ -38,6 +38,7 @@ def get_settings():
             bot=AioBot(env_var.str("TOKEN")),
             admin_id=env_var.int("ADMIN_ID"),
             admin_username=env_var.str("ADMIN_USERNAME"),
+            backend_url=env_var.str("BACKEND_URL"),
         ),
         database=Database(
             engine=env_var.str("DB_ENGINE"),

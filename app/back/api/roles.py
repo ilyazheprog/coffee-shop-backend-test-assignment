@@ -10,7 +10,7 @@ router = APIRouter(prefix="/roles", tags=["Roles"])
 
 
 @router.post("/", response_model=RoleOut)
-async def create_role(role: RoleCreate, session: AsyncSession = Depends(async_session)):
+async def create_role(role: RoleCreate, session: AsyncSession = Depends(get_async_session)):
     """
     Создаёт новую роль.
     """
@@ -35,7 +35,7 @@ async def get_role(role_id: int, session: AsyncSession = Depends(get_async_sessi
 
 @router.put("/{role_id}", response_model=RoleOut)
 async def update_role(
-    role_id: int, role_update: RoleUpdate, session: AsyncSession = Depends(async_session)
+    role_id: int, role_update: RoleUpdate, session: AsyncSession = Depends(get_async_session)
 ):
     """
     Обновляет имя роли.
@@ -57,7 +57,7 @@ async def list_roles(session: AsyncSession = Depends(get_async_session)):
 
 
 @router.delete("/{role_id}")
-async def delete_role_by_id(role_id: int, session: AsyncSession = Depends(async_session)):
+async def delete_role_by_id(role_id: int, session: AsyncSession = Depends(get_async_session)):
     """
     Удаляет роль по ID.
     """

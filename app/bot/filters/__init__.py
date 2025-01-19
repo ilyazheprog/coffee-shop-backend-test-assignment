@@ -1,1 +1,1 @@
-from .basic import AdminFilter
+from .basic import AdminFilter, ChatTypeFilter
