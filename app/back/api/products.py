@@ -2,13 +2,21 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from back.schemas import ProductCreate, ProductOut, ProductUpdate
 from modules.database.connect import get_async_session
-from modules.database.methods.products import add_product, get_product_by_id, get_all_products, update_product, delete_product
+from modules.database.methods.products import (
+    add_product,
+    get_product_by_id,
+    get_all_products,
+    update_product,
+    delete_product,
+)
 
 router = APIRouter(prefix="/products", tags=["Products"])
 
 
 @router.post("/", response_model=ProductOut)
-async def create_product(product: ProductCreate, session: AsyncSession = Depends(get_async_session)):
+async def create_product(
+    product: ProductCreate, session: AsyncSession = Depends(get_async_session)
+):
     """
     Создаёт новый продукт.
     """
@@ -25,7 +33,9 @@ async def create_product(product: ProductCreate, session: AsyncSession = Depends
 
 
 @router.get("/{product_id}", response_model=ProductOut)
-async def get_product(product_id: int, session: AsyncSession = Depends(get_async_session)):
+async def get_product(
+    product_id: int, session: AsyncSession = Depends(get_async_session)
+):
     """
     Получает продукт по ID.
     """
@@ -45,7 +55,9 @@ async def list_products(session: AsyncSession = Depends(get_async_session)):
 
 @router.put("/{product_id}", response_model=ProductOut)
 async def update_product_route(
-    product_id: int, product_update: ProductUpdate, session: AsyncSession = Depends(get_async_session)
+    product_id: int,
+    product_update: ProductUpdate,
+    session: AsyncSession = Depends(get_async_session),
 ):
     """
     Обновляет данные продукта.
@@ -63,7 +75,9 @@ async def update_product_route(
 
 
 @router.delete("/{product_id}")
-async def delete_product_route(product_id: int, session: AsyncSession = Depends(get_async_session)):
+async def delete_product_route(
+    product_id: int, session: AsyncSession = Depends(get_async_session)
+):
     """
     Удаляет продукт по ID.
     """

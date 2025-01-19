@@ -65,9 +65,7 @@ async def get_role_by_id(role_id: int, session: AsyncSession) -> Role | None:
     :param session: Сессия базы данных.
     :return: Объект роли, если найден, иначе None.
     """
-    result = await session.execute(
-        select(Role).where(Role.id == role_id)
-    )
+    result = await session.execute(select(Role).where(Role.id == role_id))
     return result.scalars().first()
 
 

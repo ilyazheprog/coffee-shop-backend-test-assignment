@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from .out import ORMSchema
 
+
 class ProductCreate(BaseModel):
     name: str
     price: float
@@ -13,7 +14,6 @@ class ProductOut(ORMSchema):
     name: str
     price: float
     in_stock: bool
-
 
 
 class ProductUpdate(BaseModel):

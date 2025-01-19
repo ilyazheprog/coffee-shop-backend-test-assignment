@@ -20,7 +20,9 @@ async def add_user(
     :return: Объект нового пользователя.
     """
     if username:
-        existing_user = await session.execute(select(User).where(User.username == username))
+        existing_user = await session.execute(
+            select(User).where(User.username == username)
+        )
         if existing_user.scalars().first():
             raise ValueError("Имя пользователя уже занято.")
 
@@ -43,7 +45,9 @@ async def is_user_exists(tg_id: int, session: AsyncSession) -> bool:
     return result.scalars().first() is not None
 
 
-async def update_username(tg_id: int, new_username: str, session: AsyncSession) -> User | None:
+async def update_username(
+    tg_id: int, new_username: str, session: AsyncSession
+) -> User | None:
     """
     Обновляет имя пользователя.
 
@@ -58,7 +62,9 @@ async def update_username(tg_id: int, new_username: str, session: AsyncSession) 
     if not user:
         return None
 
-    existing_user = await session.execute(select(User).where(User.username == new_username))
+    existing_user = await session.execute(
+        select(User).where(User.username == new_username)
+    )
     if existing_user.scalars().first():
         raise ValueError("Имя пользователя уже занято.")
 
@@ -68,7 +74,9 @@ async def update_username(tg_id: int, new_username: str, session: AsyncSession) 
     return user
 
 
-async def change_user_role(tg_id: int, new_role_id: int, session: AsyncSession) -> User | None:
+async def change_user_role(
+    tg_id: int, new_role_id: int, session: AsyncSession
+) -> User | None:
     """
     Смена роли пользователя.
 
@@ -97,7 +105,9 @@ async def get_user_by_tg_id(tg_id: int, session: AsyncSession) -> User | None:
     :param session: Сессия базы данных.
     :return: Объект пользователя, если найден, иначе None.
     """
-    result = await session.execute(select(User).options(joinedload(User.role)).where(User.id == tg_id))
+    result = await session.execute(
+        select(User).options(joinedload(User.role)).where(User.id == tg_id)
+    )
     return result.scalars().first()
 
 

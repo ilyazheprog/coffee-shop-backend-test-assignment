@@ -37,7 +37,7 @@ def get_settings():
         bot=Bot(
             bot=AioBot(env_var.str("TOKEN")),
             admin_id=env_var.int("ADMIN_ID"),
-            admin_username=env_var.str("ADMIN_USERNAME")
+            admin_username=env_var.str("ADMIN_USERNAME"),
         ),
         database=Database(
             engine=env_var.str("DB_ENGINE"),

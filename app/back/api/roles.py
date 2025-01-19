@@ -8,6 +8,7 @@ from modules.database.methods.roles import *
 
 router = APIRouter(prefix="/roles", tags=["Roles"])
 
+
 @router.post("/", response_model=RoleOut)
 async def create_role(role: RoleCreate, session: AsyncSession = Depends(async_session)):
     """
@@ -26,7 +27,7 @@ async def get_role(role_id: int, session: AsyncSession = Depends(get_async_sessi
     Получает роль по ID.
     """
     role = await get_role_by_id(role_id=role_id, session=session)
-    
+
     if not role:
         raise HTTPException(status_code=404, detail="Роль не найдена.")
     return role

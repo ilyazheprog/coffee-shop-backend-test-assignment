@@ -2,7 +2,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from ..models import Product
 
-async def add_product(name: str, price: float, in_stock: bool, session: AsyncSession) -> Product:
+
+async def add_product(
+    name: str, price: float, in_stock: bool, session: AsyncSession
+) -> Product:
     """
     Добавляет новый продукт в базу данных.
 
@@ -46,7 +49,9 @@ async def get_all_products(session: AsyncSession) -> list[Product]:
     return result.scalars().all()
 
 
-async def update_product(product_id: int, name: str, price: float, in_stock: bool, session: AsyncSession) -> Product | None:
+async def update_product(
+    product_id: int, name: str, price: float, in_stock: bool, session: AsyncSession
+) -> Product | None:
     """
     Обновляет данные продукта.
 

@@ -2,7 +2,12 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from back.schemas.carts_item import CartItemCreate, CartItemOut, CartOut
 from modules.database.connect import get_async_session
-from modules.database.methods.carts_item import add_to_cart, get_cart, remove_from_cart, clear_cart
+from modules.database.methods.carts_item import (
+    add_to_cart,
+    get_cart,
+    remove_from_cart,
+    clear_cart,
+)
 
 router = APIRouter(prefix="/cart", tags=["Cart"])
 
@@ -44,14 +49,18 @@ async def remove_item_from_cart(
     """
     Удаляет продукт из корзины.
     """
-    deleted = await remove_from_cart(user_id=user_id, product_id=product_id, session=session)
+    deleted = await remove_from_cart(
+        user_id=user_id, product_id=product_id, session=session
+    )
     if not deleted:
         raise HTTPException(status_code=404, detail="Продукт не найден в корзине.")
     return {"message": "Продукт успешно удалён из корзины."}
 
 
 @router.delete("/")
-async def clear_user_cart(user_id: int, session: AsyncSession = Depends(get_async_session)):
+async def clear_user_cart(
+    user_id: int, session: AsyncSession = Depends(get_async_session)
+):
     """
     Очищает корзину пользователя.
     """
