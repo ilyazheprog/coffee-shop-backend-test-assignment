@@ -18,3 +18,7 @@ class Order(Base):
 
     delivery_method = relationship("DeliveryMethod")  # Связь со способом доставки
     status = relationship("OrderStatus")  # Связь со статусом заказа
+
+    menu_items = relationship(
+        "MenuItem", secondary="order_menu_items", back_populates="orders"
+    )

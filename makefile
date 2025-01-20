@@ -25,12 +25,12 @@ db_clear:
 	@ docker compose exec bot bash -c "pdm db-clear"
 
 alembic_migration:
-	@ docker compose exec bot bash -c "pdm alembic-migration \"$(name)\""
+	@ docker compose exec back bash -c "pdm alembic-migration \"$(name)\""
 
 
 alembic_upgrade:
-	@ docker compose exec bot bash -c "pdm alembic-upgrade"
+	@ docker compose exec back bash -c "pdm alembic-upgrade"
 alembic_downgrade:
-	@ docker compose exec bot bash -c "pdm alembic-downgrade"
+	@ docker compose exec back bash -c "pdm alembic-downgrade"
 seeders:
 	@docker compose exec -it bot bash -c "pdm apply-seeds"

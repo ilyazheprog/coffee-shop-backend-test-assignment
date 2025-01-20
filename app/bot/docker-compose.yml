@@ -14,7 +14,6 @@ services:
       - venvs:/home/python_user/.local/share/pdm/venvs
       - ../../pyproject.toml:/home/python_user/app/pyproject.toml
       - ../../pdm.lock:/home/python_user/app/pdm.lock
-      - ../../alembic.ini:/home/python_user/app/alembic.ini
     networks:
       - net
 

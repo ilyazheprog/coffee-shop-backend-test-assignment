@@ -1,3 +1,3 @@
 from .roles import *
 from .users import *
-from .products import *
+from .menu import *

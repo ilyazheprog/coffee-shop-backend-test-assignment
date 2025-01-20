@@ -8,9 +8,9 @@ from back.schemas.orders import (
 )
 from modules.database.connect import get_async_session
 from modules.database.methods.orders import (
-    create_order,
-    get_order_by_id,
-    get_all_orders,
+    create_order_with_items,
+    get_order_with_items,
+    get_all_orders_with_items,
     update_order_status,
     update_order_price,
     delete_order,
@@ -25,13 +25,13 @@ async def create_new_order(
     order: OrderCreate, session: AsyncSession = Depends(get_async_session)
 ):
     """
-    Создаёт новый заказ.
+    Создаёт новый заказ с позициями меню.
     """
     try:
-        return await create_order(
+        return await create_order_with_items(
             user_id=order.user_id,
             delivery_method_id=order.delivery_method_id,
-            total_price=order.total_price,
+            items=order.items,
             status_id=order.status_id,
             session=session,
         )
@@ -42,20 +42,20 @@ async def create_new_order(
 @router.get("/{order_id}", response_model=OrderOut)
 async def get_order(order_id: int, session: AsyncSession = Depends(get_async_session)):
     """
-    Получает заказ по ID.
+    Получает заказ по ID с позициями меню.
     """
-    order = await get_order_by_id(order_id=order_id, session=session)
-    if not order:
-        raise HTTPException(status_code=404, detail="Заказ не найден.")
-    return order
+    try:
+        return await get_order_with_items(order_id=order_id, session=session)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @router.get("/", response_model=list[OrderOut])
 async def list_orders(session: AsyncSession = Depends(get_async_session)):
     """
-    Получает список всех заказов.
+    Получает список всех заказов с позициями меню.
     """
-    return await get_all_orders(session=session)
+    return await get_all_orders_with_items(session=session)
 
 
 @router.get("/user/{user_id}", response_model=list[OrderOut])
