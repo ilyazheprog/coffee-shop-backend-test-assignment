@@ -25,6 +25,7 @@ async def list_orders(message: types.Message):
             order_list = "\n".join(
                 f"ID: {order['id']}, Пользователь: {order['user_id']}, "
                 f"Статус: {order['status']}, Сумма: {order['total_price']}"
+                f"Дата создания: {order['created_at']}"
                 for order in orders
             )
             await message.reply(f"Список заказов:\n{order_list}")

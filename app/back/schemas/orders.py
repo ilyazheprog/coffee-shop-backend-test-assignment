@@ -21,6 +21,7 @@ class OrderOut(ORMSchema):
     delivery_method_id: int
     total_price: float
     status_id: int
+    created_at: str
     menu_items: List[dict]
 
 

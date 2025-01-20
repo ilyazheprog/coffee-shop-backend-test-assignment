@@ -12,16 +12,6 @@ async def create_order_with_items(
     status_id: int,
     session: AsyncSession,
 ) -> Order:
-    """
-    Создаёт новый заказ с позициями меню.
-
-    :param user_id: Идентификатор пользователя.
-    :param delivery_method_id: Идентификатор способа доставки.
-    :param items: Список позиций меню и их количества.
-    :param status_id: Идентификатор статуса заказа.
-    :param session: Сессия базы данных.
-    :return: Объект заказа.
-    """
     delivery_method = await session.get(DeliveryMethod, delivery_method_id)
     if not delivery_method:
         raise ValueError("Способ доставки не найден.")
@@ -63,13 +53,6 @@ async def create_order_with_items(
 
 
 async def get_order_by_id(order_id: int, session: AsyncSession) -> Order | None:
-    """
-    Получает заказ по ID.
-
-    :param order_id: ID заказа.
-    :param session: Сессия базы данных.
-    :return: Объект заказа, если найден, иначе None.
-    """
     result = await session.execute(
         select(Order)
         .options(joinedload(Order.delivery_method), joinedload(Order.status))
@@ -79,12 +62,6 @@ async def get_order_by_id(order_id: int, session: AsyncSession) -> Order | None:
 
 
 async def get_all_orders(session: AsyncSession) -> list[Order]:
-    """
-    Получает все заказы.
-
-    :param session: Сессия базы данных.
-    :return: Список всех заказов.
-    """
     result = await session.execute(
         select(Order).options(joinedload(Order.delivery_method), joinedload(Order.status))
     )
@@ -92,14 +69,6 @@ async def get_all_orders(session: AsyncSession) -> list[Order]:
 
 
 async def update_order_status(order_id: int, status_id: int, session: AsyncSession) -> Order | None:
-    """
-    Обновляет статус заказа.
-
-    :param order_id: ID заказа.
-    :param status_id: Новый статус заказа.
-    :param session: Сессия базы данных.
-    :return: Объект обновлённого заказа, если найден.
-    """
     order = await session.get(Order, order_id)
     if not order:
         return None
@@ -115,14 +84,6 @@ async def update_order_status(order_id: int, status_id: int, session: AsyncSessi
 
 
 async def update_order_price(order_id: int, new_price: float, session: AsyncSession) -> Order | None:
-    """
-    Обновляет общую стоимость заказа.
-
-    :param order_id: ID заказа.
-    :param new_price: Новая стоимость заказа.
-    :param session: Сессия базы данных.
-    :return: Объект обновлённого заказа, если найден.
-    """
     order = await session.get(Order, order_id)
     if not order:
         return None
@@ -134,13 +95,6 @@ async def update_order_price(order_id: int, new_price: float, session: AsyncSess
 
 
 async def delete_order(order_id: int, session: AsyncSession) -> bool:
-    """
-    Удаляет заказ по ID.
-
-    :param order_id: ID заказа.
-    :param session: Сессия базы данных.
-    :return: True, если заказ удалён, иначе False.
-    """
     order = await session.get(Order, order_id)
     if not order:
         return False
@@ -151,13 +105,6 @@ async def delete_order(order_id: int, session: AsyncSession) -> bool:
 
 
 async def get_orders_by_user(user_id: int, session: AsyncSession) -> list[Order]:
-    """
-    Получает все заказы пользователя.
-
-    :param user_id: Идентификатор пользователя.
-    :param session: Сессия базы данных.
-    :return: Список заказов пользователя.
-    """
     result = await session.execute(
         select(Order)
         .options(joinedload(Order.delivery_method), joinedload(Order.status))
@@ -167,13 +114,6 @@ async def get_orders_by_user(user_id: int, session: AsyncSession) -> list[Order]
 
 
 async def get_order_with_items(order_id: int, session: AsyncSession) -> dict:
-    """
-    Получает заказ с его позициями.
-
-    :param order_id: ID заказа.
-    :param session: Сессия базы данных.
-    :return: Словарь с информацией о заказе.
-    """
     result = await session.execute(
         select(Order)
         .options(
@@ -206,14 +146,7 @@ async def get_order_with_items(order_id: int, session: AsyncSession) -> dict:
     }
 
 
-
 async def get_all_orders_with_items(session: AsyncSession) -> list[dict]:
-    """
-    Получает все заказы с их позициями.
-
-    :param session: Сессия базы данных.
-    :return: Список заказов.
-    """
     result = await session.execute(
         select(Order)
         .options(

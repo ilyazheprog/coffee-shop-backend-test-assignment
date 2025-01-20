@@ -24,9 +24,6 @@ router = APIRouter(prefix="/orders", tags=["Orders"])
 async def create_new_order(
     order: OrderCreate, session: AsyncSession = Depends(get_async_session)
 ):
-    """
-    Создаёт новый заказ с позициями меню.
-    """
     try:
         return await create_order_with_items(
             user_id=order.user_id,
@@ -41,9 +38,6 @@ async def create_new_order(
 
 @router.get("/{order_id}", response_model=OrderOut)
 async def get_order(order_id: int, session: AsyncSession = Depends(get_async_session)):
-    """
-    Получает заказ по ID с позициями меню.
-    """
     try:
         return await get_order_with_items(order_id=order_id, session=session)
     except ValueError as e:
@@ -52,9 +46,6 @@ async def get_order(order_id: int, session: AsyncSession = Depends(get_async_ses
 
 @router.get("/", response_model=list[OrderOut])
 async def list_orders(session: AsyncSession = Depends(get_async_session)):
-    """
-    Получает список всех заказов с позициями меню.
-    """
     return await get_all_orders_with_items(session=session)
 
 
@@ -62,9 +53,6 @@ async def list_orders(session: AsyncSession = Depends(get_async_session)):
 async def get_user_orders(
     user_id: int, session: AsyncSession = Depends(get_async_session)
 ):
-    """
-    Получает все заказы пользователя.
-    """
     return await get_orders_by_user(user_id=user_id, session=session)
 
 
@@ -74,9 +62,6 @@ async def update_order_status_route(
     status_update: OrderUpdateStatus,
     session: AsyncSession = Depends(get_async_session),
 ):
-    """
-    Обновляет статус заказа.
-    """
     try:
         order = await update_order_status(
             order_id=order_id, status_id=status_update.status_id, session=session
@@ -95,9 +80,6 @@ async def update_order_price_route(
     price_update: OrderUpdatePrice,
     session: AsyncSession = Depends(get_async_session),
 ):
-    """
-    Обновляет стоимость заказа.
-    """
     order = await update_order_price(
         order_id=order_id, new_price=price_update.total_price, session=session
     )
@@ -110,9 +92,6 @@ async def update_order_price_route(
 async def delete_order_route(
     order_id: int, session: AsyncSession = Depends(get_async_session)
 ):
-    """
-    Удаляет заказ по ID.
-    """
     is_deleted = await delete_order(order_id=order_id, session=session)
     if not is_deleted:
         raise HTTPException(status_code=404, detail="Заказ не найден.")
