@@ -26,7 +26,7 @@ docker compose up -d --build
 docker-compose up -d --build
 ```
 
-    OpenAPI DOC: http://127.0.0.1:${BACKEND_PORT}
+OpenAPI DOC: `http://127.0.0.1:${BACKEND_PORT}`
 
 ## Недочёты
 1. Не красиво возвращаю данные методами бд
