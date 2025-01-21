@@ -1,7 +1,8 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import joinedload
-from ..models import Role
+
+from ..models import Role, User
 
 
 async def add_role(name: str, session: AsyncSession) -> Role:
@@ -78,6 +79,20 @@ async def get_all_roles(session: AsyncSession) -> list[Role]:
     """
     result = await session.execute(select(Role))
     return result.scalars().all()
+
+
+async def get_users_by_role_id(role_id: int, session: AsyncSession) -> list[User]:
+    """
+    Получает всех пользователей с данной ролью.
+
+    :param role_id: ID роли.
+    :param session: Сессия базы данных.
+    :return: Список пользователей с данной ролью.
+    """
+    result = await session.execute(
+        select(User).options(joinedload(User.role)).where(User.role_id == role_id)
+    )
+    return [user.id for user in result.scalars().all()]
 
 
 async def delete_role(role_id: int, session: AsyncSession) -> bool:

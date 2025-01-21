@@ -1,29 +1,36 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from back.schemas import MenuItemCreate, MenuItemOut
 from modules.database.connect import get_async_session
 from modules.database.methods.menu_items import (
+    create_menu_item,
+    delete_menu_item,
     get_all_menu_items,
     get_menu_item_by_id,
-    create_menu_item,
     update_menu_item,
     update_menu_item_availability,
-    delete_menu_item,
 )
-from back.schemas import MenuItemCreate, MenuItemOut
 
 router = APIRouter(prefix="/menu-items", tags=["Menu Items"])
 
 
 @router.get("/", response_model=list[MenuItemOut])
-async def list_menu_items(session: AsyncSession = Depends(get_async_session)):
+async def list_menu_items(
+    category_id: int = None,
+    is_available: bool = None,
+    session: AsyncSession = Depends(get_async_session),
+):
     """
     Возвращает список всех позиций меню.
     """
-    return await get_all_menu_items(session)
+    return await get_all_menu_items(category_id, is_available, session)
 
 
 @router.get("/{item_id}", response_model=MenuItemOut)
-async def get_menu_item(item_id: int, session: AsyncSession = Depends(get_async_session)):
+async def get_menu_item(
+    item_id: int, session: AsyncSession = Depends(get_async_session)
+):
     """
     Возвращает позицию меню по её ID.
     """
@@ -34,7 +41,9 @@ async def get_menu_item(item_id: int, session: AsyncSession = Depends(get_async_
 
 
 @router.post("/", response_model=MenuItemOut, status_code=201)
-async def create_menu_item_endpoint(item: MenuItemCreate, session: AsyncSession = Depends(get_async_session)):
+async def create_menu_item_endpoint(
+    item: MenuItemCreate, session: AsyncSession = Depends(get_async_session)
+):
     """
     Создаёт новую позицию в меню.
     """
@@ -81,13 +90,14 @@ async def update_menu_item_availability_endpoint(
     return updated_item
 
 
-@router.delete("/{item_id}")
-async def delete_menu_item_endpoint(item_id: int, session: AsyncSession = Depends(get_async_session)):
+@router.delete("/{item_id}", status_code=204)
+async def delete_menu_item_endpoint(
+    item_id: int, session: AsyncSession = Depends(get_async_session)
+):
     """
     Удаляет позицию меню по её ID.
     """
     try:
         await delete_menu_item(item_id, session)
-        return {"message": "Позиция меню успешно удалена."}
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

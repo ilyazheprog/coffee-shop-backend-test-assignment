@@ -1,4 +1,5 @@
 from pydantic import BaseModel, Field
+
 from .out import ORMSchema
 
 
@@ -17,4 +18,5 @@ class RoleUpdate(BaseModel):
     name: str = Field(..., min_length=1, max_length=20)
 
 
-__all__ = ["RoleOut", "RoleCreate", "RoleUpdate"]
+class UserIDs(BaseModel):
+    user_ids: list[int]

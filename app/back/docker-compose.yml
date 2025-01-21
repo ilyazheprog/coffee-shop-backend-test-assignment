@@ -6,7 +6,7 @@ services:
     working_dir: /home/python_user/app/back
     env_file: ../../.env
     restart: always
-    command: bash -c "pdm config venv.in_project False && pdm i-back && pdm alembic-upgrade && pdm apply-seeds && TZ="Europe/Moscow" pdm start-back"
+    command: bash -c "pdm config venv.in_project False && pdm i-back &&  pdm alembic-upgrade && pdm apply-seeds && TZ="Europe/Moscow" pdm start-back"
     ports:
       - ${BACKEND_PORT}:8000
     tty: true

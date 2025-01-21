@@ -1,13 +1,25 @@
-from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+
 from ..models import MenuItem
 
 
-async def get_all_menu_items(session: AsyncSession) -> list[MenuItem]:
+async def get_all_menu_items(
+    category_id: int, is_available: bool, session: AsyncSession
+) -> list[MenuItem]:
     """
     Возвращает список всех позиций меню.
     """
-    result = await session.execute(select(MenuItem))
+    query_conditions = []
+    if category_id:
+        query_conditions.append(MenuItem.category_id == category_id)
+    if is_available is not None:
+        query_conditions.append(MenuItem.is_available == is_available)
+
+    if query_conditions:
+        result = await session.execute(select(MenuItem).where(*query_conditions))
+    else:
+        result = await session.execute(select(MenuItem))
     return result.scalars().all()
 
 
@@ -19,7 +31,12 @@ async def get_menu_item_by_id(item_id: int, session: AsyncSession) -> MenuItem |
 
 
 async def create_menu_item(
-    name: str, category_id: int, weight: float, price: float, is_available: bool, session: AsyncSession
+    name: str,
+    category_id: int,
+    weight: float,
+    price: float,
+    is_available: bool,
+    session: AsyncSession,
 ) -> MenuItem:
     """
     Создаёт новую позицию в меню.
@@ -29,7 +46,7 @@ async def create_menu_item(
         category_id=category_id,
         weight=weight,
         price=price,
-        is_available=is_available
+        is_available=is_available,
     )
     session.add(item)
     await session.commit()
@@ -38,8 +55,13 @@ async def create_menu_item(
 
 
 async def update_menu_item(
-    item_id: int, name: str | None, category_id: int | None, weight: float | None,
-    price: float | None, is_available: bool | None, session: AsyncSession
+    item_id: int,
+    name: str | None,
+    category_id: int | None,
+    weight: float | None,
+    price: float | None,
+    is_available: bool | None,
+    session: AsyncSession,
 ) -> MenuItem | None:
     """
     Обновляет данные позиции меню.
@@ -64,7 +86,9 @@ async def update_menu_item(
     return item
 
 
-async def update_menu_item_availability(item_id: int, is_available: bool, session: AsyncSession) -> MenuItem | None:
+async def update_menu_item_availability(
+    item_id: int, is_available: bool, session: AsyncSession
+) -> MenuItem | None:
     """
     Обновляет доступность позиции меню.
     """

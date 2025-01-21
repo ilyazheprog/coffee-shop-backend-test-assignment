@@ -5,9 +5,14 @@ from sqlalchemy.orm import sessionmaker
 
 from modules.envs import settings
 
-engine = create_async_engine(settings.database.link, echo=settings.database.echo)
+engine = create_async_engine(
+    settings.database.link, pool_size=100, max_overflow=0, echo=settings.database.echo
+)
 
-async_session = async_sessionmaker(engine, expire_on_commit=False)
+async_session = async_sessionmaker(
+    engine,
+    expire_on_commit=False,
+)
 
 sync_engine = create_engine(settings.database.link, echo=settings.database.echo)
 sync_session = sessionmaker(bind=sync_engine, expire_on_commit=False)

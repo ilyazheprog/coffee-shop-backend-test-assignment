@@ -1,16 +1,24 @@
-from typing import Optional
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from back.schemas import RoleCreate, RoleOut, RoleUpdate
-from modules.database.connect import async_session, get_async_session
-from modules.database.methods.roles import *
+from back.schemas import RoleCreate, RoleOut, RoleUpdate, UserIDs
+from modules.database.connect import get_async_session
+from modules.database.methods.roles import (
+    add_role,
+    delete_role,
+    get_all_roles,
+    get_role_by_id,
+    get_users_by_role_id,
+    update_role_name,
+)
 
 router = APIRouter(prefix="/roles", tags=["Roles"])
 
 
 @router.post("/", response_model=RoleOut)
-async def create_role(role: RoleCreate, session: AsyncSession = Depends(get_async_session)):
+async def create_role(
+    role: RoleCreate, session: AsyncSession = Depends(get_async_session)
+):
     """
     Создаёт новую роль.
     """
@@ -21,7 +29,7 @@ async def create_role(role: RoleCreate, session: AsyncSession = Depends(get_asyn
     return new_role
 
 
-@router.get("/{role_id}", response_model=Optional[RoleOut])
+@router.get("/{role_id}", response_model=RoleOut)
 async def get_role(role_id: int, session: AsyncSession = Depends(get_async_session)):
     """
     Получает роль по ID.
@@ -35,7 +43,9 @@ async def get_role(role_id: int, session: AsyncSession = Depends(get_async_sessi
 
 @router.put("/{role_id}", response_model=RoleOut)
 async def update_role(
-    role_id: int, role_update: RoleUpdate, session: AsyncSession = Depends(get_async_session)
+    role_id: int,
+    role_update: RoleUpdate,
+    session: AsyncSession = Depends(get_async_session),
 ):
     """
     Обновляет имя роли.
@@ -56,12 +66,23 @@ async def list_roles(session: AsyncSession = Depends(get_async_session)):
     return await get_all_roles(session=session)
 
 
-@router.delete("/{role_id}")
-async def delete_role_by_id(role_id: int, session: AsyncSession = Depends(get_async_session)):
+@router.get("/users/{role_id}", response_model=UserIDs)
+async def get_users_by_role(
+    role_id: int, session: AsyncSession = Depends(get_async_session)
+):
+    """
+    Возвращает список пользователей с данной ролью.
+    """
+    return {"user_ids": await get_users_by_role_id(role_id=role_id, session=session)}
+
+
+@router.delete("/{role_id}", status_code=204)
+async def delete_role_by_id(
+    role_id: int, session: AsyncSession = Depends(get_async_session)
+):
     """
     Удаляет роль по ID.
     """
     deleted = await delete_role(role_id=role_id, session=session)
     if not deleted:
         raise HTTPException(status_code=404, detail="Роль не найдена.")
-    return {"message": "Роль успешно удалена."}

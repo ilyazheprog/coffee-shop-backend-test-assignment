@@ -1,13 +1,15 @@
 from aiogram import Router, types
 from aiogram.filters import Command
 import httpx
-from modules.envs.settings import settings
+
 from bot.handlers.routers import admin_router
+from modules.envs.settings import settings
 
 router = Router()
 admin_router.include_router(router)
 
 BACKEND_URL = settings.bot.backend_url
+
 
 @router.message(Command("assign_barista"))
 async def assign_barista_role(message: types.Message):
@@ -24,14 +26,18 @@ async def assign_barista_role(message: types.Message):
             response.raise_for_status()
 
             if response.status_code == 200:
-                await message.reply(f"Роль 'Бариста' успешно назначена пользователю с ID {tg_id}.")
+                await message.reply(
+                    f"Роль 'Бариста' успешно назначена пользователю с ID {tg_id}."
+                )
             else:
-                await message.reply(f"Ошибка: {response.json().get('detail', 'Неизвестная ошибка')}")
+                await message.reply(
+                    f"Ошибка: {response.json().get('detail', 'Неизвестная ошибка')}"
+                )
     except ValueError:
-        await message.reply("Некорректный формат команды. Используйте: /assign_barista <tg_id>")
+        await message.reply(
+            "Некорректный формат команды. Используйте: /assign_barista <tg_id>"
+        )
     except httpx.RequestError as e:
         await message.reply(f"Ошибка при назначении роли: {str(e)}")
     except httpx.HTTPStatusError as e:
         await message.reply(f"Ошибка на сервере: {e.response.text}")
-
-

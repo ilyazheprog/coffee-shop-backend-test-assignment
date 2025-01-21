@@ -3,9 +3,9 @@ from dataclasses import dataclass
 
 @dataclass
 class DeliveryMethod:
-    PICKUP_NAME = "PICKUP"
+    PICKUP_NAME = "Самовывоз"
     PICKUP_ID = 1
-    DELIVERY_NAME = "DELIVERY"
-    DELIVERY_ID = 2
-    EXPRESS_NAME = "EXPRESS"
-    EXPRESS_ID = 3
+    COURIER_NAME = "Курьер"
+    COURIER_ID = 2
+    IN_PLACE_NAME = "На месте"
+    IN_PLACE_ID = 3

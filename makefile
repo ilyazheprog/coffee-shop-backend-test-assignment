@@ -34,3 +34,7 @@ alembic_downgrade:
 	@ docker compose exec back bash -c "pdm alembic-downgrade"
 seeders:
 	@docker compose exec -it bot bash -c "pdm apply-seeds"
+
+lint:
+	pdm isort
+	pdm black

@@ -1,6 +1,8 @@
-from .out import ORMSchema
-from pydantic import BaseModel
 from typing import Optional
+
+from pydantic import BaseModel
+
+from .out import ORMSchema
 
 
 class UserCreate(BaseModel):

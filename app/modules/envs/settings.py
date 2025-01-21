@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from pathlib import Path
 
 from aiogram import Bot as AioBot
 from environs import Env
@@ -11,6 +10,7 @@ class Bot:
     admin_id: int
     admin_username: str
     backend_url: str
+
 
 @dataclass
 class Database:

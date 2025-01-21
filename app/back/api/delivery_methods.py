@@ -1,18 +1,19 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from back.schemas.delivery_methods import DeliveryMethodCreate, DeliveryMethodOut
+
+from back.schemas import DeliveryMethodCreate, DeliveryMethodOut
 from modules.database.connect import get_async_session
 from modules.database.methods.delivery_methods import (
     add_delivery_method,
-    get_delivery_method_by_id,
-    get_all_delivery_methods,
     delete_delivery_method,
+    get_all_delivery_methods,
+    get_delivery_method_by_id,
 )
 
 router = APIRouter(prefix="/delivery-methods", tags=["Delivery Methods"])
 
 
-@router.post("/", response_model=DeliveryMethodOut)
+@router.post("/", status_code=201, response_model=DeliveryMethodOut)
 async def create_delivery_method(
     method: DeliveryMethodCreate, session: AsyncSession = Depends(get_async_session)
 ):
@@ -48,7 +49,7 @@ async def list_delivery_methods(session: AsyncSession = Depends(get_async_sessio
     return await get_all_delivery_methods(session=session)
 
 
-@router.delete("/{delivery_method_id}")
+@router.delete("/{delivery_method_id}", status_code=204)
 async def delete_delivery_method_route(
     delivery_method_id: int, session: AsyncSession = Depends(get_async_session)
 ):
@@ -60,4 +61,3 @@ async def delete_delivery_method_route(
     )
     if not deleted:
         raise HTTPException(status_code=404, detail="Способ доставки не найден.")
-    return {"message": "Способ доставки успешно удалён."}

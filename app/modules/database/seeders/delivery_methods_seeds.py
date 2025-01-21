@@ -7,6 +7,6 @@ fields = [
 
 data = [
     [DeliveryMethod.PICKUP_ID, DeliveryMethod.PICKUP_NAME],
-    [DeliveryMethod.DELIVERY_ID, DeliveryMethod.DELIVERY_NAME],
-    [DeliveryMethod.EXPRESS_ID, DeliveryMethod.EXPRESS_NAME],
+    [DeliveryMethod.COURIER_ID, DeliveryMethod.COURIER_NAME],
+    [DeliveryMethod.IN_PLACE_ID, DeliveryMethod.IN_PLACE_NAME],
 ]

@@ -1,10 +1,12 @@
 from aiogram import Router, types
 from aiogram.filters import Command
-from modules.dataclasses.order_status import OrderStatus
+
 from bot.handlers.routers import admin_router
+from modules.dataclasses.order_status import OrderStatus
 
 router = Router()
 admin_router.include_router(router)
+
 
 @router.message(Command("statuses"))
 async def list_order_statuses(message: types.Message):
@@ -17,5 +19,8 @@ async def list_order_statuses(message: types.Message):
         (OrderStatus.COMPLETED_ID, OrderStatus.COMPLETED_NAME),
     ]
 
-    statuses_list = "\n".join(f"ID: {status_id}, Название: {status_name}" for status_id, status_name in statuses)
+    statuses_list = "\n".join(
+        f"ID: {status_id}, Название: {status_name}"
+        for status_id, status_name in statuses
+    )
     await message.reply(f"Список статусов заказов:\n{statuses_list}")

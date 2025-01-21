@@ -1,13 +1,15 @@
 from aiogram import Router, types
 from aiogram.filters import Command
 import httpx
-from modules.envs.settings import settings
+
 from bot.handlers.routers import admin_router
+from modules.envs.settings import settings
 
 router = Router()
 admin_router.include_router(router)
 
 BACKEND_URL = settings.bot.backend_url
+
 
 @router.message(Command("menu_items"))
 async def list_menu_items(message: types.Message):
@@ -65,6 +67,7 @@ async def add_menu_item(message: types.Message):
                     "category_id": int(category_id),
                     "weight": weight,
                     "price": price,
+                    "is_available": False,
                 },
             )
             response.raise_for_status()
@@ -72,9 +75,13 @@ async def add_menu_item(message: types.Message):
             if response.status_code == 201:
                 await message.reply(f"Позиция '{name}' успешно добавлена в меню.")
             else:
-                await message.reply(f"Ошибка: {response.json().get('detail', 'Неизвестная ошибка')}")
+                await message.reply(
+                    f"Ошибка: {response.json().get('detail', 'Неизвестная ошибка')}"
+                )
     except ValueError:
-        await message.reply("Некорректный формат команды. Используйте: /add_menu_item <name> <category_id> <weight> <price>")
+        await message.reply(
+            "Некорректный формат команды. Используйте: /add_menu_item <name> <category_id> <weight> <price>"
+        )
     except httpx.RequestError as e:
         await message.reply(f"Ошибка при добавлении позиции: {str(e)}")
     except httpx.HTTPStatusError as e:
@@ -94,8 +101,37 @@ async def remove_menu_item(message: types.Message):
             response.raise_for_status()
             await message.reply(f"Позиция ID {item_id} успешно удалена.")
     except ValueError:
-        await message.reply("Некорректный формат команды. Используйте: /remove_menu_item <item_id>")
+        await message.reply(
+            "Некорректный формат команды. Используйте: /remove_menu_item <item_id>"
+        )
     except httpx.RequestError as e:
         await message.reply(f"Ошибка при удалении позиции: {str(e)}")
+    except httpx.HTTPStatusError as e:
+        await message.reply(f"Ошибка на сервере: {e.response.text}")
+
+
+@router.message(Command("set_menu_item_availability"))
+async def set_menu_item_availability(message: types.Message):
+    """
+    Устанавливает доступность позиции меню.
+    Используйте: /set_menu_item_availability <item_id> <is_available (1|0)>
+    """
+    try:
+        _, item_id, is_available = message.text.split(maxsplit=2)
+        is_available = "true" if is_available == "1" else "false"
+        async with httpx.AsyncClient() as client:
+            response = await client.put(
+                f"{BACKEND_URL}/menu-items/{item_id}/availability?is_available={is_available}",
+            )
+            response.raise_for_status()
+            await message.reply(
+                f"Доступность позиции ID {item_id} установлена на {is_available}."
+            )
+    except ValueError:
+        await message.reply(
+            "Некорректный формат команды. Используйте: /set_menu_item_availability <item_id> <is_available>"
+        )
+    except httpx.RequestError as e:
+        await message.reply(f"Ошибка при установке доступности позиции: {str(e)}")
     except httpx.HTTPStatusError as e:
         await message.reply(f"Ошибка на сервере: {e.response.text}")

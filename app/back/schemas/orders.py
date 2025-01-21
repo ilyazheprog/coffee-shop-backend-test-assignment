@@ -1,5 +1,8 @@
+from datetime import datetime
+from typing import List, Optional
+
 from pydantic import BaseModel
-from typing import Optional, List
+
 from .out import ORMSchema
 
 
@@ -15,14 +18,20 @@ class OrderCreate(BaseModel):
     items: List[MenuItemInOrder]
 
 
+class UserForOrder(BaseModel):
+    user_id: int
+
+
 class OrderOut(ORMSchema):
     id: int
     user_id: int
     delivery_method_id: int
+    delivery_method_name: str
     total_price: float
     status_id: int
-    created_at: str
-    menu_items: List[dict]
+    status_name: str
+    created_at: datetime
+    items: Optional[List[MenuItemInOrder]]
 
 
 class OrderUpdateStatus(BaseModel):

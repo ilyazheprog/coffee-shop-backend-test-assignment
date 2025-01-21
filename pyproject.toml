@@ -39,16 +39,19 @@ back = [
 ]
 
 [tool.black]
-line-length = 90
+line-length = 88
 target-version = ['py312']
 
 [tool.isort]
 profile = "black"
 known_third_party = ["aiogram"]
-known_first_party = ["bot", "modules"]
+known_first_party = ["back", "bot", "modules"]
 sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
 combine_as_imports = true
 line_length = 88
+force_sort_within_sections = true  # Упорядочивает импорты внутри каждой секции
+
+
 [tool.pdm]
 distribution = false
 
@@ -69,7 +72,5 @@ alembic-upgrade = "pdm run alembic upgrade head"
 alembic-downgrade = "pdm run alembic downgrade -1"
 apply-seeds = "pdm run python -m modules.database.seeders.main"
 db-clear = "pdm run python -m modules.database.management.db_clear"
-test = "pdm run pytest"
-isort = "pdm run python -m isort app/"
+isort = "pdm run python -m isort app/  --skip __init__.py --filter-files"
 black = "pdm run python -m black app/"
-

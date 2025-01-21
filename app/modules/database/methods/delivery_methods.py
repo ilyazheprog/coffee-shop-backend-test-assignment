@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.exc import IntegrityError
+
 from ..models import DeliveryMethod
 
 
@@ -52,7 +52,9 @@ async def get_all_delivery_methods(session: AsyncSession) -> list[DeliveryMethod
     return result.scalars().all()
 
 
-async def delete_delivery_method(delivery_method_id: int, session: AsyncSession) -> bool:
+async def delete_delivery_method(
+    delivery_method_id: int, session: AsyncSession
+) -> bool:
     """
     Удаляет способ доставки по ID.
 

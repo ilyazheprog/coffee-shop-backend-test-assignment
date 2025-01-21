@@ -1,18 +1,19 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
-from back.schemas import UserCreate, UserOut, RoleChange
+
+from back.schemas import RoleChange, UserCreate, UserOut
 from modules.database.connect import get_async_session
 from modules.database.methods.users import (
     add_user,
-    get_user_by_tg_id,
-    get_all_users,
     change_user_role,
+    get_all_users,
+    get_user_by_tg_id,
 )
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.post("/", response_model=UserOut)
+@router.post("/", status_code=201, response_model=UserOut)
 async def create_user(
     user: UserCreate, session: AsyncSession = Depends(get_async_session)
 ):

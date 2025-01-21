@@ -1,6 +1,4 @@
 import asyncio
-import importlib
-import sys
 
 from sqlalchemy import delete, text
 
@@ -17,7 +15,9 @@ async def remove_data_by_model_table(model):
         # setup sequence value to start.
         if type(model) == type(Base):
             await session.execute(
-                text("select setval('{}_id_seq', 1, false);".format(model.__tablename__))
+                text(
+                    "select setval('{}_id_seq', 1, false);".format(model.__tablename__)
+                )
             )
         await session.commit()
 

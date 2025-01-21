@@ -1,13 +1,15 @@
 from aiogram import Router, types
 from aiogram.filters import Command
 import httpx
-from modules.envs.settings import settings
+
 from bot.handlers.routers import admin_router
+from modules.envs.settings import settings
 
 router = Router()
 admin_router.include_router(router)
 
 BACKEND_URL = settings.bot.backend_url
+
 
 @router.message(Command("orders"))
 async def list_orders(message: types.Message):

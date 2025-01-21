@@ -1,15 +1,18 @@
 from pydantic import BaseModel
 
 from .out import ORMSchema
+
+
 class MenuCategoryBase(BaseModel):
     name: str
+
 
 class MenuCategoryCreate(MenuCategoryBase):
     pass
 
+
 class MenuCategoryOut(MenuCategoryBase, ORMSchema):
     id: int
-
 
 
 class MenuItemBase(BaseModel):
@@ -19,8 +22,10 @@ class MenuItemBase(BaseModel):
     price: float
     is_available: bool
 
+
 class MenuItemCreate(MenuItemBase):
     pass
+
 
 class MenuItemOut(MenuItemBase, ORMSchema):
     id: int

@@ -1,9 +1,11 @@
 from aiogram import Router, types
 from aiogram.filters import CommandStart
+
 from bot.handlers.routers import admin_router
 
 router = Router()
 admin_router.include_router(router)
+
 
 @router.message(CommandStart())
 async def admin_panel(message: types.Message):
